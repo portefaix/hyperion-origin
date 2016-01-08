@@ -1,0 +1,50 @@
+{
+    "variables": {
+        "account_file": "",
+        "project_id": "",
+        "ssh_user": "",
+        "zone": "",
+        "machine_type": "",
+        "cluster_name": "",
+        "origin_version": "v1.1.0.1",
+        "image_name": "hyperion-origin-0-1-0-v20160108",
+        "image_description": "Openshift Origin Base Image for Hyperion"
+    },
+    "builders": [
+        {
+            "type": "googlecompute",
+            "account_file": "{{user `account_file`}}",
+            "project_id": "{{user `project_id`}}",
+            "source_image": "centos-7-v20151104",
+            "zone": "{{user `zone`}}",
+            "disk_size": 20,
+            "image_name": "{{user `image_name`}}",
+            "image_description": "{{user `image_description`}}",
+            "machine_type": "{{user `machine_type`}}",
+            "ssh_pty": true,
+            "ssh_username": "{{user `ssh_user`}}"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": [
+                "echo \"[dockerrepo]\nname=Docker Repository\nbaseurl=https://yum.dockerproject.org/repo/main/centos/7/\nenabled=1\ngpgcheck=1\ngpgkey=https://yum.dockerproject.org/gpg\n\" > /tmp/docker.repo",
+                "sudo mv /tmp/docker.repo /etc/yum.repos.d/docker.repo",
+                "sudo yum update -y",
+                "sudo yum install -y docker-engine",
+                "sudo systemctl enable docker"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "curl -o /tmp/origin.tar.gz -L https://github.com/openshift/origin/releases/download/{{ user `origin_version` }}/openshift-origin-server-{{ user `origin_version` }}-bf56e23-linux-64bit.tar.gz",
+                "sudo mkdir -p /opt/origin/bin",
+                "sudo tar zxvf /tmp/origin.tar.gz -C /opt/origin",
+                "sudo find /opt/origin/ -type f -executable | xargs sudo cp -t /opt/origin/bin",
+                "sudo mv /opt/origin/bin/* /usr/local/bin/"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,7 @@
+{
+    "account_file": "/etc/gcloud/account.json",
+    "project_id": "project-id",
+    "ssh_user": "username",
+    "zone": "us-central1-a",
+    "machine_type": "n1-standard-1"
+}

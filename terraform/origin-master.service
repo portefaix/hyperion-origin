@@ -1,0 +1,17 @@
+[Unit]
+Description=Origin Master Service
+Documentation=https://github.com/openshift/origin
+Requires=network.target
+After=network.target
+
+
+[Service]
+EnvironmentFile=/etc/environment
+TimeoutStartSec=20m
+ExecStart=/usr/local/bin/openshift start --master-config=/etc/origin/master/master-config.yaml
+WorkingDirectory=/opt/origin/
+SyslogIdentifier=origin-master
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
