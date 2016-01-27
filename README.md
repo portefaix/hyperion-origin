@@ -5,6 +5,8 @@
 
 ## Description
 
+![Image of components](https://github.com/portefaix/hyperion-origin/raw/master/docs/hyperion-origin.png "Hyperion Origin")
+
 [hyperion][] creates a Cloud environment :
 
 - Applications managment is performed using [Openshift Origin][]
